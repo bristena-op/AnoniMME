@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  master:
+    build:
+      context: ./master
+      dockerfile: Dockerfile
+    ports:
+      - "3000:5000"
+    volumes:
+      - ./master:/src
+    environment:
+      - FLASK_DEBUG=1
+
+  node1:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    ports:
+      - "8000:5000"
+    volumes:
+      - ./node:/src
+    environment:
+      - FLASK_DEBUG=1
+    depends_on:
+      - master
+
+  node2:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    ports:
+      - "8001:5000"
+    volumes:
+      - ./node:/src
+    environment:
+      - FLASK_DEBUG=1
+    depends_on:
+      - master

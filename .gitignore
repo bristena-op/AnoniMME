@@ -1,0 +1,14 @@
+# Ignore macOS files
+.DS_Store
+
+# Ignore all python compiled files
+*.pyc
+
+# Ignore virtual environments
+.env
+
+# Ignore test cache directory
+.cache
+
+# Ignore pycharm setting folder
+.idea
