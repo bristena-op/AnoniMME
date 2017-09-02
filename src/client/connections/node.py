@@ -10,4 +10,4 @@ def send_query(url, path, payload):
     if r.status_code == 200:
         return r
     else:
-        raise Exception("Issues sending query to {}.", query_path)
+        raise Exception("Issues sending query to", query_path)

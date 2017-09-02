@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 db = SQLAlchemy(app)
 
+EPOCH = None
 
 class Query(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -56,6 +57,13 @@ def hello_world():
     ])
 
 
+@app.route('/epoch', methods=['GET'])
+def info():
+    return jsonify({
+        'current_epoch': EPOCH,
+    })
+
+
 @app.route('/parameters', methods=['GET'])
 def parameters():
     return jsonify({
@@ -65,7 +73,14 @@ def parameters():
 
 @app.route('/end-epoch', methods=['POST'])
 def end_epoch():
+    global EPOCH
+    epoch = request.json['epoch']
     queries = request.json['queries']
+
+    if epoch != EPOCH:
+        EPOCH = epoch
+        Query.query.delete()
+        db.session.commit()
 
     for q in queries:
         current = Query.query.get(int(q["id"]))

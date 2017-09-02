@@ -28,6 +28,12 @@ Running tests
 
     python -m pytest
 
+
+## Running scripts
+
+Set the PYTHONPATH, make sure you are in the src/client directory:
+    export PYTHONPATH=$(pwd)
+
 ### NOTES
 
 Convert EcPt to a value that can work with json:

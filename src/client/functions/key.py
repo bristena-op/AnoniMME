@@ -6,7 +6,6 @@ def generate_parameters(nid):
     G = EcGroup(nid)
     g = G.hash_to_point(b"g")
     o = G.order()
-
     return (g, o)
 
 
