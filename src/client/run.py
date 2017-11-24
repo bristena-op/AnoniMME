@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import click
 
 from commands.send import send_vectors
@@ -17,14 +18,15 @@ def get_keys(filename):
 
 
 @cli.command()
+@click.option('--v', help='Send query to verification endpoint', is_flag=True)
 @click.option('--gene', prompt='Lookup gene', help='The gene you want to query.')
 @click.option('--row', prompt='Database row to write', type=int,
               help='This is the row where your query will be found in the database.')
 @click.option('--pub-key', prompt='Public key',
               help='')
-def query(gene, row, pub_key):
+def query(v, gene, row, pub_key):
     """Sends an anonymous query"""
-    send_vectors(row, gene, pub_key)
+    send_vectors(row, gene, pub_key, v)
 
 if __name__ == '__main__':
     cli()

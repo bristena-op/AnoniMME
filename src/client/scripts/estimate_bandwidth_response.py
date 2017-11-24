@@ -2,7 +2,7 @@ import urllib
 import requests
 from unittest.mock import patch
 
-from constants import NODES, NODE_QUERY_PATH
+from constants import NODES, NODE_QUERY_PATH, COLLISIONS
 from commands import send
 
 
@@ -22,13 +22,13 @@ def estimated_bandwidth(r):
     return request_size + response_size
 
 
-def generate(row, gene):
-    key_vectors, gene_vectors = send.gen_all_vectors(row, '21312312', gene)
+def generate(row, gene, db_size):
+    contact = 'Ms Marcella Hatmaker — marcella.hatmak@egl-inc.info'
+    vectors = send.gen_resp_vectors(row, contact)
+    payload = {}
 
-    payload = {
-        "gene": gene_vectors[0],
-        "key": key_vectors[0]
-    }
+    for i in range(1, COLLISIONS + 1):
+        payload[i] = vectors[0][(i - 1) * db_size: i * db_size]
 
     query_path = urllib.parse.urljoin(NODES[0], NODE_QUERY_PATH)
     r = requests.post(query_path, json=payload)
@@ -46,7 +46,7 @@ def run_bandwidth_estimation(db_size, rounds=10):
 
     with patch.object(send, 'DATABASE_SIZE', db_size):
         for i in range(rounds):
-            bandwidth += generate(i, str(i))
+            bandwidth += generate(i, str(i), db_size)
 
     return '{} bytes, {} mb'.format(bandwidth/rounds, bandwidth/rounds/10**6)
 

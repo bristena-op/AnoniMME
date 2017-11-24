@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y sqlite3
 COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
+COPY ./constants.py constants.py
+COPY ./scripts/ scripts
+
 COPY . .
 
 ENV FLASK_APP=run.py

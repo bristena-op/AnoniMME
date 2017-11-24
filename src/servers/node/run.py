@@ -30,13 +30,29 @@ class Query(db.Model):
     def __repr__(self):
         return '<Query %r %r %r>' % (self.id, self.gene, self.key)
 
+class AuxQuery(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    gene = db.Column(db.Text)
+    key = db.Column(db.Text)
+
+    def __init__(self, id, gene, key):
+        self.id = id
+        self.gene = gene
+        self.key = key
+
+    def __repr__(self):
+        return '<Query %r %r %r>' % (self.id, self.gene, self.key)
 db.create_all()
+
 
 
 @app.route('/', methods=['GET'])
 def hello_world():
     return jsonify([str(q) for q in Query.query.all()])
 
+@app.route('/aux', methods=['GET'])
+def ola_world():
+    return jsonify([str(q) for q in AuxQuery.query.all()])
 
 @app.route('/epoch', methods=['GET'])
 def info():
@@ -45,11 +61,14 @@ def info():
         'queries_max': EPOCH_MAX_COUNT,
         'queries_count': EPOCH_CURRENT_COUNT
     })
-
+@app.route('/response', methods=['GET'])
+def hi_world():
+    return jsonify( [str(q) for q in RespQuery.query.all()])
 
 @app.route('/query', methods=['POST'])
 def query():
     global EPOCH_CURRENT_COUNT
+    id = request.json['id']
     gene = request.json['gene']
     key = request.json['key']
 
@@ -75,6 +94,19 @@ def query():
 
     return 'Query received'
 
+@app.route('/verifyquery', methods=['POST'])
+def verifryquery():
+    global EPOCH_CURRENT_COUNT
+    id = request.json['id']
+    gene = request.json['gene']
+    key = request.json['key']
+    save_gene = ",".join(map(str, gene))
+    save_key = ",".join(map(str, key))
+    aux_query = AuxQuery(id, save_gene, save_key)
+
+    db.session.add(aux_query)
+    db.session.commit()
+    return "Query received"
 
 @app.route('/end-epoch', methods=['GET'])
 def end_epoch():

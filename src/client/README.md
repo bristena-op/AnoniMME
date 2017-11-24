@@ -9,7 +9,7 @@ Server description here.
 
 ## Start local development
 
-Create a local virtual environemnt for the python project to avoid version collisions between dependencies of different
+Create a local virtual environment for the python project to avoid version collisions between dependencies of different
 projects and install the development dependencies.
 
     python3 -m venv .env
@@ -40,6 +40,6 @@ Convert EcPt to a value that can work with json:
 
     str(hexlify(<EcPt>.export()).decode("utf8"))
 
-Convert json value to EcPt, we need to know the nid value to generated the eliptic curve group:
+Convert json value to EcPt, we need to know the nid value to generated the elliptic curve group:
 
     EcPt.from_binary(binascii.unhexlify(str.encode(<json_value>)),  EcGroup(nid=<nid value>))

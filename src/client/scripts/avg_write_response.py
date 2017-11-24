@@ -9,7 +9,7 @@ import random
 def random_line(afile):
     lines = list(open(afile, 'r').read().splitlines())
 
-    r = random.randint(0, len(lines))
+    r = random.randint(0, len(lines) - 1)
     if len(lines) > 0:
         line = lines[r]
 
@@ -32,11 +32,10 @@ def profile_vector_generation(db_size, rounds=1000):
     times = []
     with patch.object(send, 'DATABASE_SIZE', db_size):
         for i in range(rounds):
-            gene = random_line('gene_symbols.txt')
+            contact = random_line('contact_details.txt')
             time = timeit.timeit(
-                lambda: send.gen_all_vectors(random.randint(1, db_size), str(i), gene),
-                number=1
-            )
+                lambda: send.gen_resp_vectors(random.randint(1, db_size), contact),
+                number=1)
             times.append(time)
 
     return sum(times) / rounds
