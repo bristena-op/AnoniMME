@@ -28,7 +28,7 @@ def gen_resp_vectors(row, contact):
     # enc_contact = [encrypt_string(params, pub, contact)]
     # print(enc_contact)
     for i in range(1, COLLISIONS + 1):
-        vectors[0][row * i - 1] += string_to_number(contact**(i))
+        vectors[0][row * i - 1] += string_to_number(contact)**(i)
         # vectors[0][row * i - 1][1] += string_to_number(enc_contact[1])
 
     return vectors
@@ -72,17 +72,17 @@ def send_reponse_vectors(row, contact):
     send_query(node_url, NODE_RESPONSE_PATH, payload)
 
 def gen_gene_vectors2(row, gene):
-    vectors = gen_response_vectors(NODE_NUMBERS, DATABASE_SIZE, SMALL_INT, LARGE_INT)
+    vectors = gen_response_vectors(NODE_NUMBERS, DATABASE_SIZE, SMALL_INT, LARGE_INT, COLLISIONS)
     for i in range(1, COLLISIONS + 1):
-        vectors[0][row * i - 1] += string_to_number(gene**i)
+        vectors[0][row * i - 1] += string_to_number(gene)**i
 
     return vectors
 
 
 def gen_key_vectors2(row, key):
-    vectors = gen_response_vectors(NODE_NUMBERS, DATABASE_SIZE, SMALL_INT, LARGE_INT)
+    vectors = gen_response_vectors(NODE_NUMBERS, DATABASE_SIZE, SMALL_INT, LARGE_INT, COLLISIONS)
     for i in range(1, COLLISIONS + 1):
-        vectors[0][row * i - 1] += string_to_number(key**i)
+        vectors[0][row * i - 1] += string_to_number(key)**i
 
     return vectors
 def gen_all_vectors2(row, key, gene):

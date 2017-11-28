@@ -2,7 +2,7 @@ import urllib
 import requests
 from unittest.mock import patch
 
-from constants import NODES, NODE_QUERY_PATH, COLLISIONS
+from constants import NODES, NODE_QUERY_PATH
 from commands import send
 
 
@@ -22,13 +22,13 @@ def estimated_bandwidth(r):
     return request_size + response_size
 
 
-def generate(row, gene, db_size):
-    contact = 'Ms Marcella Hatmaker — marcella.hatmak@egl-inc.info'
-    vectors = send.gen_resp_vectors(row, contact)
-    payload = {}
+def generate(row, gene):
+    key_vectors, gene_vectors = send.gen_all_vectors2(row, '21312312', gene)
 
-    for i in range(1, COLLISIONS + 1):
-        payload[i] = vectors[0][(i - 1) * db_size: i * db_size]
+    payload = {
+        "gene": gene_vectors[0],
+        "key": key_vectors[0]
+    }
 
     query_path = urllib.parse.urljoin(NODES[0], NODE_QUERY_PATH)
     r = requests.post(query_path, json=payload)
@@ -46,15 +46,12 @@ def run_bandwidth_estimation(db_size, rounds=10):
 
     with patch.object(send, 'DATABASE_SIZE', db_size):
         for i in range(rounds):
-            bandwidth += generate(i, str(i), db_size)
+            bandwidth += generate(i, str(i))
 
     return '{} bytes, {} mb'.format(bandwidth/rounds, bandwidth/rounds/10**6)
 
 
 if __name__ == '__main__':
-    # print("DB_SIZE 2000:", run_bandwidth_estimation(2000, 1))
-    # print("DB_SIZE 10000:", run_bandwidth_estimation(10000, 1))
-    # print("DB_SIZE 20000:", run_bandwidth_estimation(20000, 1))
-    print("DB_SIZE 135:", run_bandwidth_estimation(135, 1))
+    print("DB_SIZE 135:", run_bandwidth_estimation(135 , 1))
     print("DB_SIZE 675:", run_bandwidth_estimation(675, 1))
     print("DB_SIZE 1350:", run_bandwidth_estimation(1350, 1))

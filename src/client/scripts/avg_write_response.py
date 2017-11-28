@@ -42,6 +42,9 @@ def profile_vector_generation(db_size, rounds=1000):
 
 
 if __name__ == '__main__':
-    print("DB_SIZE 2000", profile_vector_generation(2000))
-    print("DB_SIZE 10000", profile_vector_generation(10000))
-    print("DB_SIZE 20000", profile_vector_generation(20000))
+    # print("DB_SIZE 2000", profile_vector_generation(2000))
+    # print("DB_SIZE 10000", profile_vector_generation(10000))
+    # print("DB_SIZE 20000", profile_vector_generation(20000))
+    print("DB_SIZE 135", profile_vector_generation(135))
+    print("DB_SIZE 675", profile_vector_generation(675))
+    print("DB_SIZE 1350", profile_vector_generation(1350))

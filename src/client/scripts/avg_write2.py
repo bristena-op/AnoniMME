@@ -34,7 +34,7 @@ def profile_vector_generation(db_size, rounds=1000):
         for i in range(rounds):
             gene = random_line('gene_symbols.txt')
             time = timeit.timeit(
-                lambda: send.gen_all_vectors(random.randint(1, db_size), str(i), gene),
+                lambda: send.gen_all_vectors2(random.randint(1, db_size), str(i), gene),
                 number=1
             )
             times.append(time)
